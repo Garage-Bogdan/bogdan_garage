@@ -73,24 +73,63 @@ function App() {
 function Chat({ onBack }) {
   const [msg, setMsg] = useState("");
   const [history, setHistory] = useState([{ r: "bot", t: "Здоров! Що там твоя тачка? Знову щось стукає чи просто скучив? Канал наш не забувай: @АвтоПідбір_Україна" }]);
+  const [isTyping, setIsTyping] = useState(false);
 
   const ask = async () => {
-    if (!msg.trim()) return;
+    if (!msg.trim() || isTyping) return;
+    
     const userMsg = msg;
     setMsg("");
-    setHistory([...history, { r: "user", t: userMsg }]);
+    const newHistory = [...history, { r: "user", t: userMsg }];
+    setHistory(newHistory);
+    setIsTyping(true);
     
     try {
+      // Використовуємо актуальну модель gemini-1.5-flash
       const model = genAI.getGenerativeModel({ 
           model: "gemini-1.5-flash",
-          systemInstruction: "Ти — Богдан з 'Авто Підбір Україна'. Харизматичний, чесний, використовуєш сленг автопідбірника. Завжди нагадуй про YouTube @АвтоПідбір_Україна." 
+          systemInstruction: "Ти — Богдан з 'Авто Підбір Україна'. Ти авторитетний автопідбірник, трохи грубуватий, але чесний і добрий. Використовуй сленг: 'биток', 'перекупи', 'товщиномір', 'жива тачка'. Обов'язково згадуй YouTube канал @АвтоПідбір_Україна." 
       });
-      const res = await model.generateContent(userMsg);
-      setHistory(prev => [...prev, { r: "bot", t: res.response.text() }]);
+
+      const result = await model.generateContent(userMsg);
+      const response = await result.response;
+      const text = response.text();
+      
+      setHistory([...newHistory, { r: "bot", t: text }]);
     } catch (e) {
-      setHistory(prev => [...prev, { r: "bot", t: "Братан, зв'язок пропав. Спробуй ще раз!" }]);
+      console.error(e);
+      setHistory([...newHistory, { r: "bot", t: "Братан, щось з інтернетом або ключем... Глянь консоль браузера!" }]);
+    } finally {
+      setIsTyping(false);
     }
   };
+
+  return (
+    <div className="chat-screen fade-in">
+      <div className="chat-header">
+        <button onClick={onBack} className="back-circle">←</button>
+        <span>Богдан на зв'язку</span>
+      </div>
+      <div className="chat-box">
+        {history.map((m, i) => (
+          <div key={i} className={`msg-wrapper ${m.r}`}>
+            <div className={`msg-bubble ${m.r}`}>{m.t}</div>
+          </div>
+        ))}
+        {isTyping && <div className="msg-bubble bot typing">Богдан думає...</div>}
+      </div>
+      <div className="input-area">
+        <input 
+          value={msg} 
+          onChange={(e) => setMsg(e.target.value)} 
+          placeholder="Спитай про перекупів..." 
+          onKeyPress={(e) => e.key === 'Enter' && ask()} 
+        />
+        <button onClick={ask} disabled={isTyping}>{isTyping ? "..." : "🚀"}</button>
+      </div>
+    </div>
+  );
+}
 
   return (
     <div className="chat-screen">
@@ -114,3 +153,4 @@ function Chat({ onBack }) {
 }
 
 export default App;
+
