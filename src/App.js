@@ -16,6 +16,20 @@ function App() {
     { name: 'Сервіс', value: 2100, color: '#2980b9' },
     { name: 'Мийка', value: 800, color: '#95a5a6' },
   ];
+  // При завантаженні перевіряємо, чи є дані в пам'яті
+  useEffect(() => {
+    const savedCar = localStorage.getItem('bogdan_car');
+    if (savedCar) {
+      setUserCar(JSON.parse(savedCar));
+      setIsRegistered(true);
+    }
+}, []);
+
+// Коли реєструємося — зберігаємо
+const handleRegister = () => {
+  localStorage.setItem('bogdan_car', JSON.stringify(userCar));
+  setIsRegistered(true);
+};
 
   return (
     {/* Екран реєстрації */}
@@ -160,4 +174,5 @@ function Chat({ onBack }) {
 }
 
 export default App;
+
 
