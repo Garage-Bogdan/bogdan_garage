@@ -132,15 +132,16 @@ function App() {
   );
 }
 
-function Chat({ onBack, car }) {
-  const [msg, setMsg] = useState("");
-  const [history, setHistory] = useState([
-    { r: "bot", t: `Здоров! Бачу твій ${car.brand} на базі. Що підказати?` }
-  ]);
-  const [isTyping, setIsTyping] = useState(false);
-
-  const ask = async () => {
+const ask = async () => {
     if (!msg.trim() || isTyping) return;
+    
+    // Перевіряємо ключ перед запитом
+    const currentKey = process.env.REACT_APP_GEMINI_KEY || API_KEY;
+    if (!currentKey || currentKey.length < 10) {
+      setHistory(prev => [...prev, { r: "bot", t: "Братан, ключ не доїхав. Перевір Environment Variables на Vercel!" }]);
+      return;
+    }
+
     const userText = msg;
     setMsg("");
     const newHistory = [...history, { r: "user", t: userText }];
@@ -148,15 +149,38 @@ function Chat({ onBack, car }) {
     setIsTyping(true);
 
     try {
-      const model = genAI.getGenerativeModel({ 
+      // Створюємо екземпляр прямо тут, щоб уникнути помилок ініціалізації
+      const client = new GoogleGenerativeAI(currentKey);
+      
+      // Використовуємо модель gemini-1.5-flash
+      const model = client.getGenerativeModel({ 
           model: "gemini-1.5-flash",
-          systemInstruction: `Ти — Богдан з 'Авто Підбір Україна'. Харизматичний, чесний. Користувач має ${car.brand} ${car.model}. Нагадуй про YouTube.` 
       });
-      const result = await model.generateContent(userText);
+
+      const chatSession = model.startChat({
+        generationConfig: {
+          maxOutputTokens: 500,
+        },
+        history: [
+          {
+            role: "user",
+            parts: [{ text: `Ти — Богдан з 'Авто Підбір Україна'. Харизматичний авто-експерт. Твій стиль: 'Братан', 'Чесна тачка', 'Перекупи'. Користувач має ${car.brand} ${car.model}. Відповідай коротко і по суті.` }],
+          },
+          {
+            role: "model",
+            parts: [{ text: "Здоров! Я Богдан. Поняв, буду базувати як треба. Що по апарату?" }],
+          },
+        ],
+      });
+
+      const result = await chatSession.sendMessage(userText);
       const response = await result.response;
-      setHistory([...newHistory, { r: "bot", t: response.text() }]);
+      const text = response.text();
+      
+      setHistory([...newHistory, { r: "bot", t: text }]);
     } catch (e) {
-      setHistory([...newHistory, { r: "bot", t: "Братан, щось з інтернетом або ключем!" }]);
+      console.error("Детальна помилка:", e);
+      setHistory([...newHistory, { r: "bot", t: `Помилка: ${e.message}. Богдан пішов на перекур, спробуй ще раз.` }]);
     } finally {
       setIsTyping(false);
     }
@@ -180,4 +204,5 @@ function Chat({ onBack, car }) {
 }
 
 export default App;
+
 
