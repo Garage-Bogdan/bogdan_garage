@@ -1,12 +1,13 @@
 {
   "name": "bogdan-auto-app",
   "version": "1.0.0",
-  "dependencies": {
-    "@google/generative-ai": "^0.1.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+ "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
-    "recharts": "^2.10.3"
+    "recharts": "^2.15.0",
+    "web-vitals": "^4.2.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -14,3 +15,4 @@
   }
 
 }
+
