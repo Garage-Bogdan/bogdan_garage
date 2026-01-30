@@ -18,6 +18,42 @@ function App() {
   ];
 
   return (
+    {/* Екран реєстрації */}
+{!isRegistered && (
+  <div className="page fade-in registration">
+    <img src="/assets/logo.jpg" alt="Лого" style={{ width: '150px', display: 'block', margin: '0 auto 20px' }} />
+    <h2>Вітаємо в Гаражі!</h2>
+    <p>Богдан має знати, що ми сьогодні оглядаємо:</p>
+    
+    <div className="input-group">
+      <label>Марка та модель авто</label>
+      <input 
+        type="text" 
+        placeholder="напр. BMW X5" 
+        value={userCar.name} 
+        onChange={(e) => setUserCar({...userCar, name: e.target.value})}
+      />
+    </div>
+
+    <div className="input-group">
+      <label>Поточний пробіг (км)</label>
+      <input 
+        type="number" 
+        placeholder="125000" 
+        value={userCar.mileage} 
+        onChange={(e) => setUserCar({...userCar, mileage: e.target.value})}
+      />
+    </div>
+
+    <button 
+      className="main-btn bogdan" 
+      disabled={!userCar.name || !userCar.mileage}
+      onClick={() => setIsRegistered(true)}
+    >
+      Поїхали в Гараж! 🏎️
+    </button>
+  </div>
+)}
     <div className="app-container">
       {screen === 'home' && (
         <div className="fade-in">
@@ -124,3 +160,4 @@ function Chat({ onBack }) {
 }
 
 export default App;
+
