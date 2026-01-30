@@ -3,7 +3,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import './App.css';
 
 // Використовуйте свій актуальний ключ
-const API_KEY = "AIzaSyCYPj13TEwHBU3c7n9XH8XOic32JNMH6ZQ";
+const API_KEY = process.env.REACT_APP_GEMINI_KEY;
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 function App() {
@@ -198,5 +198,6 @@ function Chat({ onBack, car }) {
 }
 
 export default App;
+
 
 
