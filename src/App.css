@@ -1,16 +1,38 @@
-/* Основний контейнер, який тримає все по центру */
+/* Основне налаштування для всього додатка */
+body, html {
+  margin: 0;
+  padding: 0;
+  background: #121212; /* Темний фон для всього екрана */
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Головний контейнер, який тримає мобільний інтерфейс по центру */
 .app-container {
-  max-width: 500px; /* Обмежуємо ширину для десктопа */
-  margin: 0 auto;
+  max-width: 480px; /* Стандартна ширина мобільного пристрою */
+  margin: 0 auto;   /* Центрування на великих екранах */
   min-height: 100vh;
   background: #1a1a1a;
   display: flex;
   flex-direction: column;
   position: relative;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  box-shadow: 0 0 50px rgba(0,0,0,0.8);
+  box-sizing: border-box;
 }
 
-/* Виправляємо пропорції картинки Богдана/Авто */
+/* Виправлення великого логотипа зверху */
+.top-banner {
+  width: 100%;
+  display: block;
+}
+
+.top-banner img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Контейнер для зображення авто/Богдана */
 .pixar-container {
   width: 100%;
   padding: 10px;
@@ -19,43 +41,51 @@
 
 .pixar-frame {
   width: 100%;
-  aspect-ratio: 16 / 9; /* Чіткі пропорції */
-  border-radius: 15px;
+  aspect-ratio: 16 / 9; /* Чіткі пропорції як на Screenshot 4 */
+  border-radius: 12px;
   overflow: hidden;
-  border: 3px solid #f1c40f;
+  border: 2px solid #f1c40f;
   background: #2c3e50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .car-pixar-img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Картинка заповнює кадр без деформації */
+  object-fit: cover; /* Запобігає деформації картинки */
 }
 
-/* Виправляємо верстку чату */
+/* СТИЛІ ЧАТУ (Screenshot 4) */
 .chat-screen {
   flex: 1;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  padding-bottom: 70px; /* Місце під фіксоване поле вводу */
 }
 
 .chat-box {
-  flex: 1;
-  overflow-y: auto;
   padding: 15px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding-bottom: 80px; /* Місце для поля вводу */
+  gap: 12px;
 }
 
 .msg-bubble {
-  max-width: 85%;
-  padding: 10px 15px;
+  max-width: 80%;
+  padding: 10px 14px;
   border-radius: 15px;
-  font-size: 14px; /* Робимо текст читабельним */
+  font-size: 14px;
   line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.msg-bubble.bot {
+  align-self: flex-start;
+  background: #34495e;
+  color: #ffffff;
+  border-bottom-left-radius: 2px;
 }
 
 .msg-bubble.user {
@@ -65,73 +95,75 @@
   border-bottom-right-radius: 2px;
 }
 
-.msg-bubble.bot {
-  align-self: flex-start;
-  background: #34495e;
-  color: #fff;
-  border-bottom-left-radius: 2px;
-}
-
-/* Фіксуємо поле вводу внизу контейнера */
+/* Фіксоване поле вводу внизу (Screenshot 4) */
 .input-area {
-  position: absolute;
+  position: absolute; /* Або fixed, якщо контейнер не обмежує */
   bottom: 0;
   left: 0;
   width: 100%;
   background: #2c3e50;
-  padding: 15px;
+  padding: 12px 15px;
   display: flex;
   gap: 10px;
   box-sizing: border-box;
-  z-index: 10;
+  border-top: 1px solid #3d3d3d;
 }
 
 .input-area input {
   flex: 1;
-  background: #1a1a1a;
-  border: 1px solid #34495e;
+  background: #121212;
+  border: 1px solid #444;
   color: white;
-  padding: 12px 15px;
-  border-radius: 25px;
+  padding: 10px 15px;
+  border-radius: 20px;
   outline: none;
-  font-size: 14px;
 }
 
 .input-area button {
   background: #f1c40f;
   border: none;
-  color: black;
-  width: 45px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  font-weight: bold;
   cursor: pointer;
-  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Стилі для реєстрації (Screenshot 3) */
+/* СТИЛІ РЕЄСТРАЦІЇ (Screenshot 3/5) */
 .registration-card {
-  width: 90%;
-  margin: auto;
-  background: #2c3e50;
   padding: 20px;
-  border-radius: 20px;
-  text-align: center;
+  margin: 10px;
+  background: #242424;
+  border-radius: 15px;
+  border: 1px solid #333;
 }
 
 .input-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr; /* Дві колонки як ви просили раніше */
   gap: 10px;
-  margin: 15px 0;
+  margin-bottom: 15px;
 }
 
 .input-grid input {
   width: 100%;
-  box-sizing: border-box;
   padding: 10px;
   background: #1a1a1a;
-  border: 1px solid #34495e;
+  border: 1px solid #444;
   color: white;
   border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.main-btn {
+  width: 100%;
+  padding: 12px;
+  background: #f1c40f;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
 }
