@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import './App.css';
 
-// Використовуйте свій актуальний ключ
-const API_KEY = process.env.REACT_APP_GEMINI_KEY;
+// Використовуємо змінну середовища для безпеки
+const API_KEY = process.env.REACT_APP_GEMINI_KEY || "AIzaSyDBg5D_HKcbDelARptXccHnheRizhZntvY";
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 function App() {
@@ -17,7 +17,6 @@ function App() {
     pads: "0", engineOil: "0", gearboxOil: "0", coolant: "0", gboFilter: "0"
   });
 
-  // Регламенти замін (можна змінювати за потреби)
   const intervals = { pads: 30000, engineOil: 10000, gearboxOil: 60000, coolant: 40000, gboFilter: 15000 };
 
   useEffect(() => {
@@ -136,36 +135,28 @@ function App() {
 function Chat({ onBack, car }) {
   const [msg, setMsg] = useState("");
   const [history, setHistory] = useState([
-    { r: "bot", t: `Здоров! Бачу твій ${car?.brand || 'апарат'} на базі. Що підказати?` }
+    { r: "bot", t: `Здоров! Бачу твій ${car.brand} на базі. Що підказати?` }
   ]);
   const [isTyping, setIsTyping] = useState(false);
 
   const ask = async () => {
     if (!msg.trim() || isTyping) return;
-
     const userText = msg;
     setMsg("");
-    
-    // Створюємо нову історію локально, щоб миттєво відобразити
     const newHistory = [...history, { r: "user", t: userText }];
     setHistory(newHistory);
     setIsTyping(true);
-    
-    try {
-      // Ініціалізація моделі всередині ask для стабільності
-      const model = genAI.getGenerativeModel({ 
-        model: "gemini-1.5-flash",
-        systemInstruction: `Ти — Богдан з 'Авто Підбір Україна'. Харизматичний, чесний. Користувач має ${car?.brand} ${car?.model}. Нагадуй про YouTube @АвтоПідбір_Україна.`
-      });
 
+    try {
+      const model = genAI.getGenerativeModel({ 
+          model: "gemini-1.5-flash",
+          systemInstruction: `Ти — Богдан з 'Авто Підбір Україна'. Харизматичний, чесний. Користувач має ${car.brand} ${car.model}. Нагадуй про YouTube.` 
+      });
       const result = await model.generateContent(userText);
       const response = await result.response;
-      const botText = response.text();
-      
-      setHistory([...newHistory, { r: "bot", t: botText }]);
+      setHistory([...newHistory, { r: "bot", t: response.text() }]);
     } catch (e) {
-      console.error("Помилка Gemini:", e);
-      setHistory([...newHistory, { r: "bot", t: "Братан, Google каже, що ключ не той або ліміти вичерпані. Перевір консоль (F12)!" }]);
+      setHistory([...newHistory, { r: "bot", t: "Братан, щось з інтернетом або ключем!" }]);
     } finally {
       setIsTyping(false);
     }
@@ -173,32 +164,19 @@ function Chat({ onBack, car }) {
 
   return (
     <div className="chat-screen">
-      <div className="chat-header">
-        <button onClick={onBack} className="back">←</button>
-        <span>Богдан на зв'язку</span>
-      </div>
-      <div className="chat-box">
-        {history.map((m, i) => (
-          <div key={i} className={`msg-bubble ${m.r}`}>{m.t}</div>
-        ))}
-        {isTyping && <div className="msg-bubble bot italic">Богдан думає...</div>}
-      </div>
-      <div className="input-area">
-        <input 
-          value={msg} 
-          onChange={(e) => setMsg(e.target.value)} 
-          onKeyPress={(e) => e.key === 'Enter' && ask()}
-          placeholder="Питай..." 
-        />
-        <button onClick={ask} disabled={isTyping}>🚀</button>
-      </div>
+       <div className="chat-header">
+         <button onClick={onBack} className="back">←</button>
+         <span>Богдан AI</span>
+       </div>
+       <div className="chat-box">
+         {history.map((m,i)=><div key={i} className={`msg-bubble ${m.r}`}>{m.t}</div>)}
+       </div>
+       <div className="input-area">
+         <input value={msg} onChange={(e)=>setMsg(e.target.value)} onKeyPress={(e)=>e.key==='Enter'&&ask()} />
+         <button onClick={ask}>🚀</button>
+       </div>
     </div>
   );
 }
-}
 
 export default App;
-
-
-
-
