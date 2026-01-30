@@ -135,24 +135,37 @@ function App() {
 
 function Chat({ onBack, car }) {
   const [msg, setMsg] = useState("");
-  const [history, setHistory] = useState([{ r: "bot", t: `Здоров! Бачу твій ${car.brand} на базі. Що підказати?` }]);
+  const [history, setHistory] = useState([
+    { r: "bot", t: `Здоров! Бачу твій ${car?.brand || 'апарат'} на базі. Що підказати?` }
+  ]);
   const [isTyping, setIsTyping] = useState(false);
 
   const ask = async () => {
     if (!msg.trim() || isTyping) return;
-    const userMsg = msg; setMsg("");
-    const newHistory = [...history, { r: "user", t: userMsg }];
+
+    const userText = msg;
+    setMsg("");
+    
+    // Створюємо нову історію локально, щоб миттєво відобразити
+    const newHistory = [...history, { r: "user", t: userText }];
     setHistory(newHistory);
     setIsTyping(true);
+    
     try {
+      // Ініціалізація моделі всередині ask для стабільності
       const model = genAI.getGenerativeModel({ 
-          model: "gemini-1.5-flash",
-          systemInstruction: `Ти — Богдан з 'Авто Підбір Україна'. Користувач має ${car.brand} ${car.model}. Відповідай харизматично.` 
+        model: "gemini-1.5-flash",
+        systemInstruction: `Ти — Богдан з 'Авто Підбір Україна'. Харизматичний, чесний. Користувач має ${car?.brand} ${car?.model}. Нагадуй про YouTube @АвтоПідбір_Україна.`
       });
-      const res = await model.generateContent(userMsg);
-      setHistory([...newHistory, { r: "bot", t: res.response.text() }]);
+
+      const result = await model.generateContent(userText);
+      const response = await result.response;
+      const botText = response.text();
+      
+      setHistory([...newHistory, { r: "bot", t: botText }]);
     } catch (e) {
-      setHistory([...newHistory, { r: "bot", t: "Братан, щось з інтернетом!" }]);
+      console.error("Помилка Gemini:", e);
+      setHistory([...newHistory, { r: "bot", t: "Братан, Google каже, що ключ не той або ліміти вичерпані. Перевір консоль (F12)!" }]);
     } finally {
       setIsTyping(false);
     }
@@ -160,20 +173,30 @@ function Chat({ onBack, car }) {
 
   return (
     <div className="chat-screen">
-       <div className="chat-header">
-         <button onClick={onBack} className="back">←</button>
-         <span>Богдан AI</span>
-       </div>
-       <div className="chat-box">
-         {history.map((m,i)=><div key={i} className={`msg-bubble ${m.r}`}>{m.t}</div>)}
-       </div>
-       <div className="input-area">
-         <input value={msg} onChange={(e)=>setMsg(e.target.value)} onKeyPress={(e)=>e.key==='Enter'&&ask()} />
-         <button onClick={ask}>🚀</button>
-       </div>
+      <div className="chat-header">
+        <button onClick={onBack} className="back">←</button>
+        <span>Богдан на зв'язку</span>
+      </div>
+      <div className="chat-box">
+        {history.map((m, i) => (
+          <div key={i} className={`msg-bubble ${m.r}`}>{m.t}</div>
+        ))}
+        {isTyping && <div className="msg-bubble bot italic">Богдан думає...</div>}
+      </div>
+      <div className="input-area">
+        <input 
+          value={msg} 
+          onChange={(e) => setMsg(e.target.value)} 
+          onKeyPress={(e) => e.key === 'Enter' && ask()}
+          placeholder="Питай..." 
+        />
+        <button onClick={ask} disabled={isTyping}>🚀</button>
+      </div>
     </div>
   );
 }
+}
 
 export default App;
+
 
