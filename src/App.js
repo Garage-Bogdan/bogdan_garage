@@ -3,6 +3,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import './App.css';
 
+// Твій ключ. Якщо знову буде помилка в чаті - створи новий в Google AI Studio
 const API_KEY = "AIzaSyDBg5D_HKcbDelARptXccHnheRizhZntvY";
 const genAI = new GoogleGenerativeAI(API_KEY);
 
@@ -21,14 +22,12 @@ function App() {
       {screen === 'home' && (
         <div className="fade-in">
           <div className="header">
-            {/* Твій Логотип */}
-            <img src="/assets/logo.jpg" alt="Авто Підбір Україна" className="app-logo" style={{ width: '180px', marginBottom: '10px' }} />
+            <img src="/assets/logo.jpg" alt="Лого" className="app-logo" style={{ width: '180px', marginBottom: '10px' }} />
             <h1>Volkswagen Golf</h1>
             <div className="mileage-tag">{mileage} км</div>
           </div>
           <div className="car-container" onClick={() => setScreen('service')}>
             <div className="pixar-frame">
-              {/* Богдан, що біжить */}
               <img src="/assets/bogdan_run.jpg" alt="Богдан" style={{ height: '100%', borderRadius: '15px' }} />
             </div>
             <p className="hint">Натисни на Богдана для ТО 🔧</p>
@@ -77,7 +76,6 @@ function Chat({ onBack }) {
 
   const ask = async () => {
     if (!msg.trim() || isTyping) return;
-    
     const userMsg = msg;
     setMsg("");
     const newHistory = [...history, { r: "user", t: userMsg }];
@@ -85,51 +83,18 @@ function Chat({ onBack }) {
     setIsTyping(true);
     
     try {
-      // Використовуємо актуальну модель gemini-1.5-flash
       const model = genAI.getGenerativeModel({ 
           model: "gemini-1.5-flash",
-          systemInstruction: "Ти — Богдан з 'Авто Підбір Україна'. Ти авторитетний автопідбірник, трохи грубуватий, але чесний і добрий. Використовуй сленг: 'биток', 'перекупи', 'товщиномір', 'жива тачка'. Обов'язково згадуй YouTube канал @АвтоПідбір_Україна." 
+          systemInstruction: "Ти — Богдан з 'Авто Підбір Україна'. Харизматичний, чесний, використовуєш сленг автопідбірника. Завжди нагадуй про YouTube @АвтоПідбір_Україна." 
       });
-
-      const result = await model.generateContent(userMsg);
-      const response = await result.response;
-      const text = response.text();
-      
-      setHistory([...newHistory, { r: "bot", t: text }]);
+      const res = await model.generateContent(userMsg);
+      setHistory(prev => [...prev, { r: "bot", t: res.response.text() }]);
     } catch (e) {
-      console.error(e);
-      setHistory([...newHistory, { r: "bot", t: "Братан, щось з інтернетом або ключем... Глянь консоль браузера!" }]);
+      setHistory(prev => [...prev, { r: "bot", t: "Братан, зв'язок пропав. Спробуй ще раз!" }]);
     } finally {
       setIsTyping(false);
     }
   };
-
-  return (
-    <div className="chat-screen fade-in">
-      <div className="chat-header">
-        <button onClick={onBack} className="back-circle">←</button>
-        <span>Богдан на зв'язку</span>
-      </div>
-      <div className="chat-box">
-        {history.map((m, i) => (
-          <div key={i} className={`msg-wrapper ${m.r}`}>
-            <div className={`msg-bubble ${m.r}`}>{m.t}</div>
-          </div>
-        ))}
-        {isTyping && <div className="msg-bubble bot typing">Богдан думає...</div>}
-      </div>
-      <div className="input-area">
-        <input 
-          value={msg} 
-          onChange={(e) => setMsg(e.target.value)} 
-          placeholder="Спитай про перекупів..." 
-          onKeyPress={(e) => e.key === 'Enter' && ask()} 
-        />
-        <button onClick={ask} disabled={isTyping}>{isTyping ? "..." : "🚀"}</button>
-      </div>
-    </div>
-  );
-}
 
   return (
     <div className="chat-screen">
@@ -143,14 +108,19 @@ function Chat({ onBack }) {
             {m.t}
           </div>
         ))}
+        {isTyping && <div className="msg bot">Богдан друкує...</div>}
       </div>
       <div className="input-area">
-        <input value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="Питай про тачки..." onKeyPress={(e) => e.key === 'Enter' && ask()} />
-        <button onClick={ask}>🚀</button>
+        <input 
+          value={msg} 
+          onChange={(e) => setMsg(e.target.value)} 
+          placeholder="Питай..." 
+          onKeyPress={(e) => e.key === 'Enter' && ask()} 
+        />
+        <button onClick={ask} disabled={isTyping}>🚀</button>
       </div>
     </div>
   );
 }
 
 export default App;
-
