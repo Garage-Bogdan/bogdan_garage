@@ -1,0 +1,15 @@
+{
+  "short_name": "Богдан Авто",
+  "name": "Авто Підбір Україна",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#f1c40f",
+  "background_color": "#1a1a1a"
+}
