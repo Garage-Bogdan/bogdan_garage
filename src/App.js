@@ -53,11 +53,14 @@ function App() {
     }
   };
 
-  const askBogdan = async () => {
+const askBogdan = async () => {
     if (!msg.trim() || isTyping) return;
+    
+    // Пріоритет: ключ з Vercel, якщо немає - порожній рядок
     const currentKey = process.env.REACT_APP_GEMINI_KEY || API_KEY;
+    
     if (!currentKey) {
-      setHistory(prev => [...prev, { r: "bot", t: "Братан, ключ не знайдено в налаштуваннях Vercel!" }]);
+      setHistory(prev => [...prev, { r: "bot", t: "Братан, ключ не знайдено! Додай REACT_APP_GEMINI_KEY у Vercel Settings." }]);
       return;
     }
 
@@ -69,17 +72,28 @@ function App() {
 
     try {
       const client = new GoogleGenerativeAI(currentKey);
+      // Використовуємо 1.5-flash як найшвидшу та стабільну модель
       const model = client.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const result = await model.generateContent(`Ти Богдан з 'Авто Підбір Україна'. Клієнт має ${userCar.brand} ${userCar.model}. Питання: ${userText}`);
+
+      const result = await model.generateContent({
+        contents: [{ 
+          role: "user", 
+          parts: [{ text: `Ти Богдан з 'Авто Підбір Україна'. Твій стиль: харизматичний, чесний перекуп, сленг ('братан', 'жива тачка'). Клієнт має ${userCar.brand} ${userCar.model}. Питання: ${userText}` }] 
+        }],
+        generationConfig: { maxOutputTokens: 500 }
+      });
+
       const response = await result.response;
-      setHistory([...newHistory, { r: "bot", t: response.text() }]);
+      const text = response.text();
+      
+      setHistory([...newHistory, { r: "bot", t: text }]);
     } catch (e) {
-      setHistory([...newHistory, { r: "bot", t: "Богдан пішов на перекур (помилка ключа). Спробуй пізніше!" }]);
+      console.error("Chat Error:", e);
+      setHistory([...newHistory, { r: "bot", t: "Богдан пішов на перекур. Можливо, ліміти API вичерпані або ключ заблоковано." }]);
     } finally {
       setIsTyping(false);
     }
   };
-
   if (!isRegistered) {
     return (
       <div className="app-container registration-page fade-in">
@@ -172,3 +186,4 @@ function App() {
 }
 
 export default App;
+
