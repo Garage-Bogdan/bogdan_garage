@@ -3,7 +3,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import './App.css';
 
 // Використовуємо змінну середовища для безпеки
-const API_KEY = process.env.REACT_APP_GEMINI_KEY || "AIzaSyDBg5D_HKcbDelARptXccHnheRizhZntvY";
+const API_KEY = process.env.REACT_APP_GEMINI_KEY;
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 function App() {
@@ -180,3 +180,4 @@ function Chat({ onBack, car }) {
 }
 
 export default App;
+
