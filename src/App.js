@@ -19,6 +19,23 @@ function App() {
 
   return (
     <div className="app-container">
+  {screen === 'home' && (
+    <div className="fade-in">
+      <div className="header">
+        {/* Додаємо твій логотип */}
+        <img src="/assets/logo.jpg" alt="Лого" style={{width: '100px', marginBottom: '10px'}} />
+        <h1>Volkswagen Golf</h1>
+        <div className="mileage-tag">{mileage} км</div>
+      </div>
+      
+      <div className="car-container" onClick={() => setScreen('service')}>
+        <div className="pixar-frame">
+          {/* Замість тексту вставляємо Богдана, який біжить */}
+          <img src="/assets/bogdan_run.jpg" alt="Богдан" style={{height: '100%'}} />
+        </div>
+        <p className="hint">Натисни на Богдана для ТО 🔧</p>
+      </div>
+    <div className="app-container">
       {screen === 'home' && (
         <div className="fade-in">
           <div className="header">
@@ -108,5 +125,6 @@ function Chat({ onBack }) {
     </div>
   );
 }
+
 
 export default App;
