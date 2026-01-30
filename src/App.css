@@ -70,3 +70,71 @@ input { flex: 1; padding: 10px; border-radius: 5px; border: none; }
   cursor: pointer;
 }
 
+/* Шапка з лого та аватаром */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: #1e272e;
+  border-bottom: 2px solid #f1c40f;
+}
+
+.nav-logo {
+  height: 35px; /* Зменшено на 50% від оригіналу */
+  width: auto;
+  border-radius: 5px;
+}
+
+.nav-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.expert-name {
+  font-size: 0.8rem;
+  color: #f1c40f;
+  font-weight: bold;
+}
+
+.nav-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid #f1c40f;
+  object-fit: cover;
+}
+
+/* Стиль реєстрації */
+.input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 20px;
+}
+
+.input-grid input {
+  background: #34495e;
+  border: none;
+  padding: 12px;
+  color: white;
+  border-radius: 8px;
+}
+
+.reset-link {
+  background: none;
+  border: none;
+  color: #7f8c8d;
+  width: 100%;
+  margin-top: 15px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.chat-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
