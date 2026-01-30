@@ -1,4 +1,4 @@
-body { margin: 0; background: #1a1a1a; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { margin: 0; background: #1a1a1a; color: white; font-family: sans-serif; }
 .app-container { max-width: 450px; margin: 0 auto; min-height: 100vh; background: #2c3e50; }
 
 /* Навігація */
@@ -10,57 +10,53 @@ body { margin: 0; background: #1a1a1a; color: white; font-family: 'Segoe UI', Ta
   background: #1e272e;
   border-bottom: 3px solid #f1c40f;
 }
-.nav-logo { height: 30px; width: auto; opacity: 0.9; }
+.nav-logo { height: 30px; width: auto; }
 .nav-profile { display: flex; align-items: center; gap: 10px; }
-.expert-name { font-size: 0.75rem; color: #f1c40f; font-weight: bold; text-transform: uppercase; }
+.expert-name { font-size: 0.75rem; color: #f1c40f; font-weight: bold; }
 .nav-avatar { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #f1c40f; object-fit: cover; }
 
 /* Інфо */
 .header-info { text-align: center; padding: 20px 10px; }
 .header-info h1 { margin: 0; font-size: 1.8rem; }
-.car-subtext { color: #bdc3c7; margin: 5px 0; font-size: 0.9rem; }
 .mileage-tag { background: #f1c40f; color: black; display: inline-block; padding: 5px 20px; border-radius: 20px; font-weight: bold; }
 
 /* Pixar Frame */
-.pixar-frame { width: 90%; margin: 20px auto; border-radius: 25px; overflow: hidden; border: 4px solid #f1c40f; height: 220px; position: relative; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+.pixar-container { padding: 0 20px; }
+.pixar-frame { width: 100%; border-radius: 25px; overflow: hidden; border: 4px solid #f1c40f; height: 220px; }
 .car-pixar-img { width: 100%; height: 100%; object-fit: cover; filter: saturate(1.3) contrast(1.1); }
-.vin-label { position: absolute; top: 10px; right: 10px; background: rgba(46, 204, 113, 0.8); font-size: 0.6rem; padding: 2px 8px; border-radius: 10px; }
 
 /* Реєстрація */
 .registration-page { display: flex; align-items: center; justify-content: center; padding: 20px; }
-.registration-card { background: #34495e; padding: 25px; border-radius: 20px; width: 100%; box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
-.logo-small-reg { height: 40px; margin-bottom: 10px; }
-.input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
-.input-grid input { background: #2c3e50; border: 1px solid #444; padding: 12px; color: white; border-radius: 10px; font-size: 0.9rem; }
+.registration-card { background: #34495e; padding: 25px; border-radius: 20px; width: 100%; }
+.logo-half { height: 30px; margin-bottom: 15px; }
+.avatar-small { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #f1c40f; }
+.reg-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.input-grid input { background: #2c3e50; border: none; padding: 12px; color: white; border-radius: 10px; }
+
+/* ТО Список */
+.maint-list { margin-top: 20px; display: flex; flex-direction: column; gap: 12px; padding: 0 20px; }
+.maint-item { background: #34495e; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; border-left: 4px solid #f1c40f; }
+.maint-info { display: flex; flex-direction: column; width: 60%; }
+.maint-info input { background: #1a1a1a; border: none; color: white; padding: 5px; border-radius: 5px; margin-top: 5px; }
+.remains { text-align: right; }
+.remains strong { color: #2ecc71; display: block; font-size: 1.1rem; }
+.remains.urgent strong { color: #e74c3c; animation: blink 1s infinite; }
 
 /* Кнопки */
-.main-btn { width: 90%; margin: 10px 5%; padding: 15px; border-radius: 15px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
-.bogdan { background: #f1c40f; color: black; font-size: 1rem; }
-.bogdan:hover { background: #d4ac0d; }
+.main-btn { width: 90%; margin: 10px 5%; padding: 15px; border-radius: 15px; border: none; font-weight: bold; cursor: pointer; }
+.bogdan { background: #f1c40f; color: black; }
 .stats { background: #95a5a6; color: white; }
-.reset-link { background: none; border: none; color: #7f8c8d; width: 100%; margin-top: 20px; text-decoration: underline; cursor: pointer; }
+.reset-link { background: none; border: none; color: #7f8c8d; width: 100%; margin-top: 15px; text-decoration: underline; cursor: pointer; }
 
 /* Чат */
 .chat-screen { display: flex; flex-direction: column; height: 100vh; background: #1a1a1a; }
-.chat-header { padding: 15px; background: #34495e; display: flex; align-items: center; border-bottom: 2px solid #f1c40f; }
-.chat-avatar { width: 35px; height: 35px; border-radius: 50%; margin: 0 10px; border: 1px solid #f1c40f; }
+.chat-header { padding: 15px; background: #34495e; display: flex; align-items: center; border-bottom: 2px solid #f1c40f; color: white; }
 .chat-box { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
-.msg-bubble { padding: 12px 18px; border-radius: 18px; max-width: 75%; font-size: 0.95rem; }
-.msg-bubble.user { background: #f1c40f; color: black; align-self: flex-end; border-bottom-right-radius: 2px; }
-.msg-bubble.bot { background: #3d3d3d; color: white; align-self: flex-start; border-bottom-left-radius: 2px; }
+.msg-bubble { padding: 12px; border-radius: 15px; max-width: 80%; }
+.msg-bubble.user { background: #f1c40f; color: black; align-self: flex-end; }
+.msg-bubble.bot { background: #34495e; color: white; align-self: flex-start; }
 .input-area { padding: 20px; display: flex; gap: 10px; background: #2c3e50; }
-.input-area input { flex: 1; padding: 12px; border-radius: 25px; border: none; outline: none; }
-.italic { font-style: italic; opacity: 0.7; }
-/* Додай це до попередніх стилів */
-.maint-list { margin-top: 20px; display: flex; flex-direction: column; gap: 15px; }
-.maint-item { background: #34495e; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #f1c40f; }
-.maint-info { display: flex; flex-direction: column; gap: 5px; width: 60%; }
-.maint-info label { font-size: 0.8rem; color: #bdc3c7; }
-.maint-info input { background: #2c3e50; border: 1px solid #444; color: white; padding: 5px; border-radius: 5px; }
-.remains { text-align: right; width: 35%; }
-.remains span { font-size: 0.6rem; display: block; color: #f1c40f; text-transform: uppercase; }
-.remains strong { font-size: 0.9rem; color: #2ecc71; }
-.remains.urgent strong { color: #e74c3c; animation: blink 1s infinite; }
+.input-area input { flex: 1; padding: 12px; border-radius: 20px; border: none; }
 
 @keyframes blink { 50% { opacity: 0.5; } }
-
